@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.Arrays;
 
 final class SudokuModel implements Sudoku {
+	private static final long serialVersionUID = 7823359376980607527L;
 	private int[][] board;
 	
 	SudokuModel(){

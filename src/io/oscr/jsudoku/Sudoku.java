@@ -1,6 +1,8 @@
 package io.oscr.jsudoku;
 
-public interface Sudoku {
+import java.io.Serializable;
+
+public interface Sudoku extends Serializable {
 	
 	/**
 	 * Checks if the Sudoku is valid and solved. If both are true the method will return true. Otherwise false.
