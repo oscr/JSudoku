@@ -174,7 +174,7 @@ final class SudokuModel implements Sudoku {
 	private int[][] copyBoard(int[][] board) {
 		int[][] result = new int[Constants.BOARDSIZE][Constants.BOARDSIZE];
 		for (int i = 0; i < Constants.BOARDSIZE; i++)
-			result[i] = (int[])board[i].clone();
+			result[i] = Arrays.copyOf(board[i], board[i].length);
 		
 		return result;
 	}
@@ -257,7 +257,7 @@ final class SudokuModel implements Sudoku {
 	 */
 	private boolean isValidRow(int[] row) {
 		// Make a copy so that original isn't affected
-		int[] copy = (int[]) row.clone();
+		int[] copy = Arrays.copyOf(row,  row.length);
 		Arrays.sort(copy);
 
 		// Only counts to 8 since it uses i+1 further down. 
@@ -285,7 +285,7 @@ final class SudokuModel implements Sudoku {
 	 */
 	private boolean isSolvedRow(int[] row) {
 		// Make a copy so that original isn't affected
-		int[] copy = (int[]) row.clone();
+		int[] copy = Arrays.copyOf(row,  row.length);
 		Arrays.sort(copy);
 
 		// Check if there is an empty squre
