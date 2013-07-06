@@ -8,7 +8,14 @@ final class SudokuModel implements Sudoku {
 	private int[][] board;
 
 	SudokuModel() {
-		this.board = init();
+		this(Constants.AMOUNT_UNSOLVED);
+	}
+	
+	SudokuModel(int boxesUnsolved) {
+		SudokuModel tmp = new SudokuModel(new int[Constants.BOARDSIZE][Constants.BOARDSIZE]);
+		tmp.trySolve();
+		removeParts(boxesUnsolved, tmp.board);
+		this.board = tmp.board;
 
 	}
 
@@ -178,25 +185,6 @@ final class SudokuModel implements Sudoku {
 			result[i] = Arrays.copyOf(board[i], board[i].length);
 
 		return result;
-	}
-
-	/*
-	 * Will invoke helper function in order to create a new Sudoku. Will return
-	 * a Sudoku board with some coordinates emptied so that the Sudoku isn't
-	 * solved when returned.
-	 */
-	private int[][] init() {
-		try {
-			solve(new SudokuModel(new int[Constants.BOARDSIZE][Constants.BOARDSIZE]));
-
-		} catch (SudokuSolvedException sse) {
-			int[][] board = sse.getSudokuModel().board;
-			removeParts(Constants.AMOUNT_UNSOLVED, board);
-			return board;
-
-		}
-
-		throw new IllegalStateException("Generation of Sudoku failed! Should not be possible");
 	}
 
 	/*
