@@ -11,10 +11,10 @@ final class SudokuModel implements Sudoku {
 		this(Constants.AMOUNT_UNSOLVED);
 	}
 	
-	SudokuModel(int boxesUnsolved) {
+	SudokuModel(int boxesEmpty) {
 		SudokuModel tmp = new SudokuModel(new int[Constants.BOARDSIZE][Constants.BOARDSIZE]);
 		tmp.trySolve();
-		removeParts(boxesUnsolved, tmp.board);
+		removeParts(boxesEmpty, tmp.board);
 		this.board = tmp.board;
 
 	}

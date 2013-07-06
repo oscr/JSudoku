@@ -24,6 +24,18 @@ public enum SudokuFactory {
 	}
 
 	/**
+	 * Creates a Sudoku with the given amount of empty squares. 
+	 * 
+	 * The Sudoku is guaranteed to be solvable and the numbers will be randomized. Two invocations are highly unlikely to return the same Sudoku.
+	 * 
+	 * @param boxesEmpty the number of empty positions in the Sudoku. The following must hold: 1 <= boxesEmpty <= 64.
+	 * @return A new Sudoku with specified amount of empty boxes.
+	 */
+	public static Sudoku makeSudoku(int boxesEmpty){
+		return new SudokuModel(boxesEmpty);
+	}
+
+	/**
 	 * Creates a deep copy of a Sudoku. 
 	 * 
 	 * @param sudoku to be copied.

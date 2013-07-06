@@ -168,5 +168,27 @@ public class SudokuTest {
 		assertEquals(copySudoku, sudoku);
 		
 	}
+	
+	@Test
+	public void create30EmptyBoxesSudokuAndSolve() {
+		int emptyPositions = 30;
+		Sudoku sudoku = SudokuFactory.makeSudoku(emptyPositions);
+		
+		for(int i = 0; i < Constants.BOARDSIZE; i++){
+			for(int j = 0; j < Constants.BOARDSIZE; j++){
+				if(sudoku.getPosition(i, j) == Constants.EMPTY_POSITION){
+					emptyPositions--;
+				}
+			}
+		}
+		
+		assertEquals(0, emptyPositions);
+		assertTrue(sudoku.isValid());
+		assertFalse(sudoku.isSolved());
+		
+		assertTrue(sudoku.trySolve());
+		assertTrue(sudoku.isSolved());
+		assertTrue(sudoku.isValid());
+	}
 
 }
