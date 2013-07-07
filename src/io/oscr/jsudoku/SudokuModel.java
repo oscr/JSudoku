@@ -2,6 +2,7 @@ package io.oscr.jsudoku;
 
 import java.awt.Point;
 import java.util.Arrays;
+import java.util.Stack;
 
 final class SudokuModel implements Sudoku {
 	private static final long serialVersionUID = 7823359376980607527L;
@@ -105,20 +106,16 @@ final class SudokuModel implements Sudoku {
 	 */
 	@Override
 	public boolean trySolve() {
-
 		if (!isValid()) {
 			return false;
-
 		}
 
-		try {
-			solve(new SudokuModel(board));
-
-		} catch (SudokuSolvedException ex) {
-			board = ex.getSudokuModel().board;
+		SudokuModel sudoku = solve(new SudokuModel(board));
+		if(sudoku != null){
+			board = sudoku.board;
 			return true;
-
 		}
+
 		return false;
 
 	}
@@ -346,55 +343,41 @@ final class SudokuModel implements Sudoku {
 	}
 
 	/*
-	 * Will given a SudokuModel recursively try to solve the Sudoku. Will throw
-	 * a SudokuSolvedException containing the solved SudokuModel if a solution
-	 * is found. Otherwise nothing will happen.
+	 * Will attempt to solve Sudoku by using brute force.
+	 * 
+	 * @param Sudoku to be solved.
+	 * @return solved Sudoku or null if not solvable.
 	 */
-	private void solve(SudokuModel sudoku) throws SudokuSolvedException {
-		// Stop searching for solution if the Sudoku is solved.
-		if (sudoku.isSolved()) {
-			throw new SudokuSolvedException(sudoku);
-		}
+	private SudokuModel solve(SudokuModel sudoku){
+		Stack<SudokuModel> stack = new Stack<>();
+		stack.push(sudoku);
+		
+		while(!stack.isEmpty()){
+			sudoku = stack.pop();
+			
+			if(sudoku.isSolved())
+				return sudoku;
+			
+			Point p = sudoku.getFirstEmpty();
+			
+			// This allows it to be used to generate Sudokus!
+			int[] values = new int[Constants.BOARDSIZE];
+			for (int i = 0; i < 9; i++) {
+				values[i] = i + 1;
+			}
+			shuffle(values);
 
-		// If it isn't solved then we want to find the first empty space.
-		// There will always be one since there is a check if a Sudoku is
-		// valid before the recursive call.
-		Point p = sudoku.getFirstEmpty();
-
-		// This allows it to be used to generate Sudokus!
-		int[] values = new int[Constants.BOARDSIZE];
-		for (int i = 0; i < 9; i++) {
-			values[i] = i + 1;
-		}
-		shuffle(values);
-
-		// Try to fill the empty point with each digit from 1-9
-		for (int i : values) {
-			SudokuModel t = new SudokuModel(sudoku.board);
-			t.setPosition(p.x, p.y, i);
-
-			// If it's valid continue to try to solve it.
-			if (t.isValid()) {
-				solve(t);
+			// Try to fill the empty point with each digit from 1-9
+			for (int i : values) {
+				SudokuModel tmp = new SudokuModel(sudoku.board);
+				tmp.setPosition(p.x, p.y, i);
+				
+				// If it's valid continue to try to solve it.
+				if (tmp.isValid()) {
+					stack.push(tmp);
+				}
 			}
 		}
+		return null;
 	}
-
-	/*
-	 * Used to return a solved board from the solve function.
-	 */
-	@SuppressWarnings("serial")
-	private final class SudokuSolvedException extends RuntimeException {
-		private SudokuModel sudoku;
-
-		public SudokuSolvedException(SudokuModel s) {
-			sudoku = s;
-		}
-
-		public SudokuModel getSudokuModel() {
-			return sudoku;
-		}
-
-	}
-
 }
