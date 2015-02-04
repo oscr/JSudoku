@@ -1,6 +1,6 @@
 ### Welcome!
 
-JSudoku is a library written in Java that can generate and solve Sudoku puzzels. It supports reading and writing Sudoku's from plain text files seperated by spaces.
+JSudoku is a library written in Java that can generate and solve Sudoku puzzles. It supports reading and writing Sudoku's from plain text files seperated by spaces.
 
 Quick example:
 ```
